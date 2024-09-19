@@ -10,17 +10,21 @@ if not st.session_state.get('timer'):
 
 @st.fragment(run_every=1)
 def timer_countdown(container):
-    time_left = (st.session_state['timer'] + datetime.timedelta(minutes=3)) - datetime.datetime.now()
+    time_left = (st.session_state['timer'] + datetime.timedelta(seconds=20)) - datetime.datetime.now()
 
-    container.text(
-        f'Time left: #{time_left.total_seconds()}'
-    )
+    if time_left < datetime.timedelta(seconds=0):
+        container.text('Times Out!')
+    else:
+        container.text(
+            f'Time left: #{time_left.total_seconds()}'
+        )
 
 
 placeholder = st.empty()
 
 password = st.text_input('password')
-if password == st.secrets['password']:
+time_left = (st.session_state['timer'] + datetime.timedelta(seconds=20)) - datetime.datetime.now()
+if password == st.secrets['password'] and time_left > datetime.timedelta(seconds=0):
     st.write('Bingo')
 
 timer_countdown(placeholder)
